@@ -25,6 +25,7 @@ export class New extends React.Component {
   }
   render = () => (
     <View title="Button12345" color="#FF8000" style={styles.View_undefined}>
+      <Text>Hello</Text>
       <View style={styles.View_undefined} />
     </View>
   )
