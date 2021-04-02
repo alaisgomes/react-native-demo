@@ -1,42 +1,64 @@
 import React, { Component } from "react"
-import {
-  View,
-  Image,
-  ImageBackground,
-  TouchableOpacity,
-  Text,
-  Button,
-  Switch,
-  TextInput,
-  StyleSheet,
-  ScrollView
-} from "react-native"
-import DateTimePicker from "react-native-datepicker"
-import Icon from "react-native-vector-icons/FontAwesome"
-import Slider from "@react-native-community/slider"
-import { CheckBox } from "react-native-elements"
+import { View, Text, StyleSheet, FlatList } from "react-native"
+
 import { connect } from "react-redux"
-import { widthPercentageToDP as wp } from "react-native-responsive-screen"
+import { universitiesapi_get_search_list } from "../../store/universitiesAPI/universitiesapi_response_get_Searches.slice"
+
 export class New extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {}
   }
-  render = () => (
-    <View title="Button12345" color="#FF8000" style={styles.View_undefined}>
-      <Text>Hello</Text>
-      <View style={styles.View_undefined} />
+  componentDidMount() {
+    this.props.load({ country: "Japan", name: "Technology" })
+  }
+  renderItem = ({ item }) => (
+    <View style={styles.card}>
+      <Text style={styles.text}>{item.name}</Text>
+      <Text style={styles.country}>{item.country}</Text>
     </View>
   )
+
+  render() {
+    const { universities } = this.props
+    return (
+      <FlatList
+        data={universities}
+        renderItem={this.renderItem}
+        keyExtractor={(item, index) => `${item.alpha_two_code}${index}`}
+      />
+    )
+  }
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  card: {
+    padding: 10,
+    backgroundColor: "#C8A2C8"
+  },
+  text: {
+    fontSize: 28,
+    color: "#ffffff"
+  },
+  country: {
+    fontSize: 18,
+    color: "#f2f2f2"
+  },
+  body: {
+    padding: 10,
+    fontSize: 16
+  }
+})
 
 const mapStateToProps = state => {
-  return {}
+  return {
+    universities: state.universitiesapi_response_get_Searches.entities
+  }
 }
-const mapDispatchToProps = () => {
-  return {}
+const mapDispatchToProps = dispatch => {
+  return {
+    load: param => dispatch(universitiesapi_get_search_list(param))
+  }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(New)
