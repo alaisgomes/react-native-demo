@@ -1,41 +1,41 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { apiService } from "./services"
-const api_v1_product_list = createAsyncThunk(
+export const api_v1_product_list = createAsyncThunk(
   "products/api_v1_product_list",
   async payload => {
     const response = await apiService.api_v1_product_list(payload)
     return response.data
   }
 )
-const api_v1_product_create = createAsyncThunk(
+export const api_v1_product_create = createAsyncThunk(
   "products/api_v1_product_create",
   async payload => {
     const response = await apiService.api_v1_product_create(payload)
     return response.data
   }
 )
-const api_v1_product_read = createAsyncThunk(
+export const api_v1_product_read = createAsyncThunk(
   "products/api_v1_product_read",
   async payload => {
     const response = await apiService.api_v1_product_read(payload)
     return response.data
   }
 )
-const api_v1_product_update = createAsyncThunk(
+export const api_v1_product_update = createAsyncThunk(
   "products/api_v1_product_update",
   async payload => {
     const response = await apiService.api_v1_product_update(payload)
     return response.data
   }
 )
-const api_v1_product_partial_update = createAsyncThunk(
+export const api_v1_product_partial_update = createAsyncThunk(
   "products/api_v1_product_partial_update",
   async payload => {
     const response = await apiService.api_v1_product_partial_update(payload)
     return response.data
   }
 )
-const api_v1_product_delete = createAsyncThunk(
+export const api_v1_product_delete = createAsyncThunk(
   "products/api_v1_product_delete",
   async payload => {
     const response = await apiService.api_v1_product_delete(payload)

@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { View, Text, StyleSheet, FlatList } from "react-native"
 
 import { connect } from "react-redux"
-import { universitiesapi_get_search_list } from "../../store/universitiesAPI/universitiesapi_response_get_Searches.slice"
+import { thunks } from "@store"
 
 export class New extends React.Component {
   constructor(props) {
@@ -52,13 +52,14 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = state => {
+  console.log(state)
   return {
     universities: state.universitiesapi_response_get_Searches.entities
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
-    load: param => dispatch(universitiesapi_get_search_list(param))
+    load: param => dispatch(thunks.universitiesapi_get_search_list(param))
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(New)

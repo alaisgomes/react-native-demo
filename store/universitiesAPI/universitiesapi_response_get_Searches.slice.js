@@ -3,10 +3,7 @@ import { apiService } from "./services"
 
 export const universitiesapi_get_search_list = createAsyncThunk(
   "universitiesapi_response_get_Searches/universitiesapi_get_search_list",
-  async payload => {
-    const response = await apiService.universitiesapi_get_search_list(payload)
-    return response.data
-  }
+  async payload => await apiService.universitiesapi_get_search_list(payload)
 )
 const initialState = { entities: [], api: { loading: "idle", error: null } }
 const universitiesapi_response_get_SearchesSlice = createSlice({
@@ -21,7 +18,7 @@ const universitiesapi_response_get_SearchesSlice = createSlice({
     },
     [universitiesapi_get_search_list.fulfilled]: (state, action) => {
       if (state.api.loading === "pending") {
-        state.entities = [...state.entities, ...action.payload]
+        state.entities = [...state.entities, ...action.payload.data]
         state.api.loading = "idle"
       }
     },
