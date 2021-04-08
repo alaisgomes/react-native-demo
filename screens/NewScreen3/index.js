@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { View, Text, StyleSheet, FlatList } from "react-native"
 
 import { connect } from "react-redux"
-import { thunks } from "@store"
+import { thunks, slices } from "@store"
 
 export class New extends React.Component {
   constructor(props) {
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = state => {
-  console.log(state)
+  // console.log(JSON.stringify(state))
   return {
     universities: state.universitiesapi_response_get_Searches.entities
   }

@@ -1,54 +1,90 @@
-import React from 'react';
-import { StyleSheet, Button, View, SafeAreaView, Text, Alert } from 'react-native';
+import React from "react"
+import { View, Button, Text, StyleSheet, FlatList } from "react-native"
+import { useSelector, useDispatch } from "react-redux"
+import { unwrapResult } from "@reduxjs/toolkit"
+import { thunks } from "@store"
 
-const Separator = () => (
-  <View style={styles.separator} />
-);
+const UserComponent = () => {
+  const { entities, api } = useSelector(state => state.users)
+  const dispatch = useDispatch()
 
-const CustomComponents = () => (
-  <SafeAreaView style={styles.container}>
-    <View>
-      <Text style={styles.title}>
-        The title and onPress handler are required. It is recommended to set accessibilityLabel to help make your app usable by everyone.
+  const onClick = async () => {
+    try {
+      const resultAction = await dispatch(thunks.api_v1_user_list())
+      // In case you need to access the newly returned value by the api call, use the code below:
+      const users = unwrapResult(resultAction)
+      console.log(
+        "success",
+        `Refreshed pets list: ${users.length} before was ${entities.length}`
+      )
+      // end
+    } catch (err) {
+      console.log("error", `Fetch failed: ${err.message}`)
+      console.log(`error can also be here: ${api.error?.message}`)
+    }
+  }
+
+  const renderItem = ({ item }) => (
+    <View style={styles.card}>
+      <Text>
+        Full Name: {item.first_name} {item.last_name}
       </Text>
-      <Button
-        title="Press me"
-        onPress={() => Alert.alert('Simple Button pressed')}
-      />
-    </View>
-    <Separator />
-    <View>
-      <Text style={styles.title}>
-        Adjust the color in a way that looks standard on each platform. On  iOS, the color prop controls the color of the text. On Android, the color adjusts the background color of the button.
+      <Text>
+        Just Name: {item.name}
       </Text>
-      <Button
-        title="Press me"
-        color="#f194ff"
-        onPress={() => Alert.alert('Button with adjusted color pressed')}
-      />
+      <Text>{item.email}</Text>
     </View>
-  </SafeAreaView>
-);
+  )
 
+  return (
+    <View style={styles.body}>
+      <Text>There's {entities.length} users in the database.</Text>
+      <FlatList
+        data={entities}
+        renderItem={renderItem}
+        keyExtractor={item => `${item.id}`}
+      />
+      <View style={styles.buttons}>
+        <Button style={styles.button} title="Refresh" onPress={onClick} />
+        <Button
+          title="Get User 1"
+          onPress={() => dispatch(thunks.api_v1_user_read({ id: 1 }))}
+        />
+        <Button
+          title="Update user 1 with first_name"
+          onPress={() =>
+            dispatch(thunks.api_v1_user_partial_update({ id: 1, data: {first_name: 'Aline'} }))
+          }
+        />
+      </View>
+    </View>
+  )
+}
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    marginHorizontal: 16,
+  card: {
+    padding: 10,
+    backgroundColor: "#d4f2e5",
+    marginBottom: 5,
+    borderColor: "#a9c1b7",
+    borderWidth: 1
   },
-  title: {
-    textAlign: 'center',
-    marginVertical: 8,
+  text: {
+    fontSize: 28,
+    color: "#ffffff"
   },
-  fixToText: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  button: {
+    margin: 15
   },
-  separator: {
-    marginVertical: 8,
-    borderBottomColor: '#737373',
-    borderBottomWidth: StyleSheet.hairlineWidth,
+  buttons: {
+    flexDirection: "column",
+    justifyContent: "space-between",
+    height: 130,
+    marginTop: 10
   },
-});
+  body: {
+    padding: 10,
+    fontSize: 16
+  }
+})
 
-export default CustomComponents;
+export default UserComponent
