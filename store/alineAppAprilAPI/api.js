@@ -1,3 +1,4 @@
+import axios from "axios"
 const alineAppAprilAPI = axios.create({
   baseURL: "https://aline-app-april-27--22126.botics.co",
   headers: { Accept: "application/json", "Content-Type": "application/json" }
