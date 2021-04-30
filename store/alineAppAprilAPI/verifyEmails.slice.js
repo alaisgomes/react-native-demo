@@ -2,8 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { apiService } from "./api"
 export const rest_auth_registration_verify_email_create = createAsyncThunk(
   "verifyEmails/rest_auth_registration_verify_email_create",
-  async payload =>
-    await apiService.rest_auth_registration_verify_email_create(payload)
+  async payload => {
+    const response = await apiService.rest_auth_registration_verify_email_create(
+      payload
+    )
+    return response.data
+  }
 )
 const initialState = { entities: [], api: { loading: "idle", error: null } }
 const verifyEmailsSlice = createSlice({
@@ -18,7 +22,7 @@ const verifyEmailsSlice = createSlice({
     },
     [rest_auth_registration_verify_email_create.fulfilled]: (state, action) => {
       if (state.api.loading === "pending") {
-        state.entities.push(action.payload.data)
+        state.entities.push(action.payload)
         state.api.loading = "idle"
       }
     },

@@ -2,11 +2,17 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { apiService } from "./api"
 export const api_v1_signup_create = createAsyncThunk(
   "signups/api_v1_signup_create",
-  async payload => await apiService.api_v1_signup_create(payload)
+  async payload => {
+    const response = await apiService.api_v1_signup_create(payload)
+    return response.data
+  }
 )
 export const rest_auth_registration_create = createAsyncThunk(
   "signups/rest_auth_registration_create",
-  async payload => await apiService.rest_auth_registration_create(payload)
+  async payload => {
+    const response = await apiService.rest_auth_registration_create(payload)
+    return response.data
+  }
 )
 const initialState = { entities: [], api: { loading: "idle", error: null } }
 const signupsSlice = createSlice({
@@ -21,7 +27,7 @@ const signupsSlice = createSlice({
     },
     [api_v1_signup_create.fulfilled]: (state, action) => {
       if (state.api.loading === "pending") {
-        state.entities.push(action.payload.data)
+        state.entities.push(action.payload)
         state.api.loading = "idle"
       }
     },
@@ -38,7 +44,7 @@ const signupsSlice = createSlice({
     },
     [rest_auth_registration_create.fulfilled]: (state, action) => {
       if (state.api.loading === "pending") {
-        state.entities.push(action.payload.data)
+        state.entities.push(action.payload)
         state.api.loading = "idle"
       }
     },
